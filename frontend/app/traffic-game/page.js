@@ -23,7 +23,7 @@ export default function TrafficGame() {
   const [gameStatus, setGameStatus] = useState("IDLE"); 
   const [correctAnswer, setCorrectAnswer] = useState(null);
   
-  // NEW: State to hold the final flow paths
+ 
   const [finalFlows, setFinalFlows] = useState({}); 
 
   const startRound = () => {
@@ -43,7 +43,7 @@ export default function TrafficGame() {
     const resultEK = edmondsKarp(network, NODES, 'A', 'T');
     
     setCorrectAnswer(resultEK.flow);
-    // NEW: Save the specific edge flows so the chart can draw them
+   
     setFinalFlows(resultEK.edgeFlows);
 
     if (parseInt(userInput) === resultEK.flow) {
@@ -92,7 +92,7 @@ export default function TrafficGame() {
                   const midX = (from.x + to.x) / 2;
                   const midY = (from.y + to.y) / 2;
                   
-                  // NEW: Determine if this specific road was used in the correct answer
+                  
                   const flowUsed = finalFlows[`${edge.from}-${edge.to}`] || 0;
                   const isActive = showResults && flowUsed > 0;
                   const lineOpacity = showResults && !isActive ? "opacity-30" : "opacity-100";
