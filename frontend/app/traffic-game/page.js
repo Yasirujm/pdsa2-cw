@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from 'react';
-import { edmondsKarp, fordFulkerson } from '../../lib/trafficLogic';
+
+const BACKEND_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8085';
 
 const NODE_POSITIONS = {
   A: { x: 50, y: 200 }, B: { x: 200, y: 80 }, C: { x: 200, y: 200 },
@@ -9,47 +10,95 @@ const NODE_POSITIONS = {
   G: { x: 550, y: 140 }, H: { x: 550, y: 260 }, T: { x: 700, y: 200 },
 };
 
-const NODES = Object.keys(NODE_POSITIONS);
-const EDGE_LIST = [
-  ['A','B'], ['A','C'], ['A','D'], ['B','E'], ['B','F'], 
-  ['C','E'], ['C','F'], ['D','F'], ['E','G'], ['E','H'], 
-  ['F','H'], ['G','T'], ['H','T']
-];
-
 export default function TrafficGame() {
   const [network, setNetwork] = useState([]);
   const [userInput, setUserInput] = useState("");
   const [userName, setUserName] = useState("");
-  const [gameStatus, setGameStatus] = useState("IDLE"); 
+  const [gameStatus, setGameStatus] = useState("IDLE");
   const [correctAnswer, setCorrectAnswer] = useState(null);
-  
- 
-  const [finalFlows, setFinalFlows] = useState({}); 
+  const [roundId, setRoundId] = useState(null);
+  const [finalFlows, setFinalFlows] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const startRound = () => {
-    const newEdges = EDGE_LIST.map(([from, to]) => ({
-      from, to, capacity: Math.floor(Math.random() * 11) + 5
-    }));
-    setNetwork(newEdges);
-    setGameStatus("PLAYING");
-    setUserInput("");
-    setCorrectAnswer(null);
-    setFinalFlows({});
+  const startRound = async () => {
+    setIsLoading(true);
+    setErrorMessage("");
+
+    try {
+      const response = await fetch(`${BACKEND_BASE_URL}/api/traffic-game/rounds`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ minCapacity: 5, maxCapacity: 15 }),
+      });
+
+      if (!response.ok) {
+        const errorBody = await response.json().catch(() => ({}));
+        throw new Error(errorBody.error || 'Failed to generate network map');
+      }
+
+      const data = await response.json();
+      setNetwork(data.edges || []);
+      setRoundId(data.roundId);
+      setGameStatus("PLAYING");
+      setUserInput("");
+      setCorrectAnswer(null);
+      setFinalFlows({});
+    } catch (error) {
+      setErrorMessage(error.message || 'Cannot connect to backend server');
+      setGameStatus("IDLE");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleSubmit = async () => {
-    if (!userName || !userInput) return alert("Please enter your name and flow estimate!");
+    if (!userName || !userInput) {
+      return alert("Please enter your name and flow estimate!");
+    }
 
-    const resultEK = edmondsKarp(network, NODES, 'A', 'T');
-    
-    setCorrectAnswer(resultEK.flow);
-   
-    setFinalFlows(resultEK.edgeFlows);
+    if (!roundId) {
+      return alert("Round is missing. Please generate a new network map.");
+    }
 
-    if (parseInt(userInput) === resultEK.flow) {
-      setGameStatus("WON");
-    } else {
-      setGameStatus("LOST");
+    const parsedInput = parseInt(userInput, 10);
+    if (Number.isNaN(parsedInput)) {
+      return alert("Please enter a valid number.");
+    }
+
+    setIsLoading(true);
+    setErrorMessage("");
+
+    try {
+      const response = await fetch(`${BACKEND_BASE_URL}/api/traffic-game/answers`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          roundId,
+          playerName: userName,
+          estimatedMaxFlow: parsedInput,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorBody = await response.json().catch(() => ({}));
+        throw new Error(errorBody.error || 'Failed to submit answer');
+      }
+
+      const data = await response.json();
+      setCorrectAnswer(data.actualMaxFlow);
+
+      const flowMap = {};
+      (data.edgeFlows || []).forEach((edge) => {
+        flowMap[`${edge.from}-${edge.to}`] = edge.flow;
+      });
+      setFinalFlows(flowMap);
+
+      setGameStatus(data.correct ? "WON" : "LOST");
+    } catch (error) {
+      setErrorMessage(error.message || 'Cannot connect to backend server');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -62,12 +111,15 @@ export default function TrafficGame() {
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-2 text-white">Traffic Network Simulator</h1>
           <p className="text-slate-400">Calculate maximum flow from <span className="text-blue-400 font-bold">A</span> to <span className="text-emerald-400 font-bold">T</span>.</p>
+          {errorMessage && (
+            <p className="text-sm text-red-400 mt-3">{errorMessage}</p>
+          )}
         </div>
         
         {gameStatus === "IDLE" ? (
           <div className="flex justify-center mt-10">
-            <button onClick={startRound} className="px-8 py-4 bg-blue-600 hover:bg-blue-500 rounded-full font-bold text-white transition-all">
-              Generate Network Map
+            <button onClick={startRound} disabled={isLoading} className="px-8 py-4 bg-blue-600 hover:bg-blue-500 rounded-full font-bold text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed">
+              {isLoading ? "Generating..." : "Generate Network Map"}
             </button>
           </div>
         ) : (
@@ -131,7 +183,9 @@ export default function TrafficGame() {
             
             {/* ACTIONS & FEEDBACK */}
             {gameStatus === "PLAYING" && (
-              <button onClick={handleSubmit} className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-all">Submit Answer</button>
+              <button onClick={handleSubmit} disabled={isLoading} className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-all disabled:opacity-60 disabled:cursor-not-allowed">
+                {isLoading ? "Submitting..." : "Submit Answer"}
+              </button>
             )}
 
             {gameStatus === "WON" && (
