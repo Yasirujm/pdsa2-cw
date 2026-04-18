@@ -3,7 +3,7 @@ package com.pdsa.backend.minimumcost.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public class SubmitAnswerRequest {
+public class MinimumCostSubmitAnswerRequest {
     @NotBlank
     private String playerName;
     @NotNull

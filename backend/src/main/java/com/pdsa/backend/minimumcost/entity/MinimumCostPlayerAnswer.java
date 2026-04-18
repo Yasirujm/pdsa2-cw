@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "minimum_cost_player_answers")
-public class PlayerAnswer {
+public class MinimumCostPlayerAnswer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

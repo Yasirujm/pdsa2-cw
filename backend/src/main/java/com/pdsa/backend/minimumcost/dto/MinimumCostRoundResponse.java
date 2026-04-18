@@ -2,7 +2,7 @@ package com.pdsa.backend.minimumcost.dto;
 
 import java.util.List;
 
-public class RoundResponse {
+public class MinimumCostRoundResponse {
     private Long gameRoundId;
     private int taskCount;
     private int[][] costMatrix;

@@ -1,11 +1,11 @@
 package com.pdsa.backend.minimumcost.dto;
 
-public class SubmitAnswerResponse {
+public class MinimumCostSubmitAnswerResponse {
     private boolean correct;
     private String result;
     private int correctAnswer;
 
-    public SubmitAnswerResponse(boolean correct, String result, int correctAnswer) {
+    public MinimumCostSubmitAnswerResponse(boolean correct, String result, int correctAnswer) {
         this.correct = correct;
         this.result = result;
         this.correctAnswer = correctAnswer;

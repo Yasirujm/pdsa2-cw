@@ -3,7 +3,7 @@ package com.pdsa.backend.minimumcost.dto;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 
-public class CreateRoundRequest {
+public class MinimumCostCreateRoundRequest {
     @Min(50)
     @Max(100)
     private int taskCount;
