@@ -25,14 +25,19 @@ export async function submitAnswer(payload: {playerName: string; gameRoundId: nu
 }
 
 // min cost
-export async function MinCostcreateRound(taskCount: number) {
-    const res = await fetch(`${MinCost_URL}/round`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ taskCount }),
-    });
-    if (!res.ok) throw new Error('Failed to create round');
-    return res.json();
+export async function MinCostcreateRound(payload: {
+  taskCount: number;
+  useRandomSize: boolean;
+})
+{
+  const res = await fetch(`${MinCost_URL}/round`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) throw new Error('Failed to create round');
+  return res.json();
 }
 
 export async function MinCostsubmitAnswer(payload: { playerName: string; gameRoundId: number; selectedAnswer: number;}) {
