@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-const BACKEND_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8085';
+const BACKEND_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8080';
 
 const NODE_POSITIONS = {
   A: { x: 50, y: 200 }, B: { x: 200, y: 80 }, C: { x: 200, y: 200 },
