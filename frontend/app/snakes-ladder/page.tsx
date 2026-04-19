@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import BoardView from '../../components/BoardView';
-import AnswerOptions from '../../components/AnswerOptions';
-import ResultBanner from '../../components/ResultBanner';
+import BoardView from '../../components/snakeladder/BoardView';
+import AnswerOptions from '../../components/snakeladder/AnswerOptions';
+import ResultBanner from '../../components/snakeladder/ResultBanner';
 import { createRound, submitAnswer } from '../../lib/api';
 
 export default function SnakesLadderPage() {
@@ -12,7 +12,6 @@ export default function SnakesLadderPage() {
   const [round, setRound] = useState<any>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [result, setResult] = useState<'WIN' | 'LOSE' | 'DRAW' | null>(null);
-  const [correctAnswer, setCorrectAnswer] = useState<number | undefined>(undefined);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -21,7 +20,6 @@ export default function SnakesLadderPage() {
       setLoading(true);
       setError('');
       setResult(null);
-      setCorrectAnswer(undefined);
       setSelectedAnswer(null);
 
       const data = await createRound(boardSize);
@@ -55,7 +53,6 @@ export default function SnakesLadderPage() {
       });
 
       setResult(response.result);
-      setCorrectAnswer(response.correctAnswer);
     } catch (err) {
       setError('Failed to submit answer');
     } finally {
@@ -129,23 +126,9 @@ export default function SnakesLadderPage() {
             />
           </div>
 
-          <ResultBanner result={result} correctAnswer={correctAnswer} />
+          <ResultBanner result={result}/>
 
           <div className="bg-white rounded-2xl border p-4">
-            <div className="grid md:grid-cols-2 gap-4 mb-4">
-              <div className="rounded-xl bg-slate-50 p-3 border">
-                <div className="font-semibold">BFS</div>
-                <div>Answer: {round.bfsAnswer}</div>
-                <div>Time: {round.bfsTimeNanos} ns</div>
-              </div>
-
-              <div className="rounded-xl bg-slate-50 p-3 border">
-                <div className="font-semibold">Dijkstra</div>
-                <div>Answer: {round.dijkstraAnswer}</div>
-                <div>Time: {round.dijkstraTimeNanos} ns</div>
-              </div>
-            </div>
-
             <BoardView boardSize={round.boardSize} jumps={round.jumps} />
           </div>
         </>
