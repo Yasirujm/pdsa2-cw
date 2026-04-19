@@ -80,7 +80,7 @@ export default function KnightsTourPage() {
           validationMessage: finalMsg,
         };
 
-        const response = await fetch('http://localhost:8081/api/knight-tour/save-result', {
+        const response = await fetch('http://localhost:8080/api/knight-tour/save-result', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
@@ -152,7 +152,7 @@ export default function KnightsTourPage() {
     try {
       console.log('Sending request to backend...');
 
-      const response = await fetch('http://localhost:8081/api/knight-tour/start', {
+      const response = await fetch('http://localhost:8080/api/knight-tour/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ boardSize }),
@@ -211,7 +211,7 @@ export default function KnightsTourPage() {
 
     try {
       // 1. Solve Greedy
-      const greedyResp = await fetch('http://localhost:8081/api/knight-tour/solve-greedy', {
+      const greedyResp = await fetch('http://localhost:8080/api/knight-tour/solve-greedy', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -228,7 +228,7 @@ export default function KnightsTourPage() {
 
     // 2. Solve DFS
     try {
-      const dfsResp = await fetch('http://localhost:8081/api/knight-tour/solve-dfs', {
+      const dfsResp = await fetch('http://localhost:8080/api/knight-tour/solve-dfs', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -302,7 +302,7 @@ export default function KnightsTourPage() {
     setIsValidated(true);
 
     try {
-      const response = await fetch('http://localhost:8081/api/knight-tour/validate', {
+      const response = await fetch('http://localhost:8080/api/knight-tour/validate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -343,7 +343,7 @@ export default function KnightsTourPage() {
         dfsBoard = dfsResult.dfsBoard || dfsResult.board;
       } else {
         setIsCalculating(true);
-        const response = await fetch('http://localhost:8081/api/knight-tour/solve-dfs', {
+        const response = await fetch('http://localhost:8080/api/knight-tour/solve-dfs', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
