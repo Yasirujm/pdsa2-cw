@@ -131,10 +131,6 @@ export default function MinimumCostPage() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <div className="text-xs uppercase tracking-wide text-slate-400">Game Type</div>
-                  <div className="mt-2 text-sm font-semibold text-amber-300">Optimization</div>
-                </div>
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                   <div className="text-xs uppercase tracking-wide text-slate-400">Difficulty</div>
                   <div className="mt-2 text-sm font-semibold text-rose-300">
                     {useRandomSize ? 'Random' : 'Manual'}
