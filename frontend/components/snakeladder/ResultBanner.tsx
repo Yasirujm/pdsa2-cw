@@ -1,5 +1,7 @@
 'use client';
 
+import { BadgeCheck, Target, Scale } from 'lucide-react';
+
 type Props = {
   result: 'WIN' | 'LOSE' | 'DRAW' | null;
   correctAnswer?: number;
@@ -8,28 +10,71 @@ type Props = {
 export default function ResultBanner({ result, correctAnswer }: Props) {
   if (!result) return null;
 
-  const styles =
-    result === 'WIN'
-      ? 'bg-emerald-900/30 text-emerald-400 border-emerald-500/50'
-      : result === 'LOSE'
-      ? 'bg-red-900/30 text-red-400 border-red-500/50'
-      : 'bg-yellow-900/30 text-yellow-400 border-yellow-500/50';
+  if (result === 'WIN') {
+    return (
+      <div className="mt-5 rounded-[22px] border-4 border-[#1f2937] bg-[#dff3e4] p-5 shadow-[6px_6px_0_#1f2937]">
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <div className="text-xs font-black uppercase tracking-[0.22em] text-[#355070]">
+              Result
+            </div>
+            <h3 className="mt-2 text-2xl font-black text-[#1f2937]">
+              Correct Answer
+            </h3>
+            <p className="mt-2 text-sm font-medium text-[#374151]">
+              Great job. You selected the minimum dice throw count.
+            </p>
+          </div>
+          <div className="rounded-full border-4 border-[#1f2937] bg-white p-3">
+            <BadgeCheck size={28} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (result === 'LOSE') {
+    return (
+      <div className="mt-5 rounded-[22px] border-4 border-[#1f2937] bg-[#ffd6d6] p-5 shadow-[6px_6px_0_#1f2937]">
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <div className="text-xs font-black uppercase tracking-[0.22em] text-[#355070]">
+              Result
+            </div>
+            <h3 className="mt-2 text-2xl font-black text-[#1f2937]">
+              Wrong Answer
+            </h3>
+            <p className="mt-2 text-sm font-medium text-[#374151]">
+              Correct answer:{' '}
+              <span className="font-black text-[#1f2937]">{correctAnswer}</span>
+            </p>
+          </div>
+          <div className="rounded-full border-4 border-[#1f2937] bg-white p-3">
+            <Target size={28} />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className={`mt-4 rounded-xl border p-4 text-center ${styles}`}>
-      <div className="font-bold text-lg">{result === 'WIN' ? 'You Win!' : result === 'LOSE' ? 'Wrong Answer' : result}</div>
-
-      {result === 'WIN' && (
-        <div className="text-slate-300 mt-1">
-          Correct answer selected.
+    <div className="mt-5 rounded-[22px] border-4 border-[#1f2937] bg-[#e0e7ff] p-5 shadow-[6px_6px_0_#1f2937]">
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          <div className="text-xs font-black uppercase tracking-[0.22em] text-[#355070]">
+            Result
+          </div>
+          <h3 className="mt-2 text-2xl font-black text-[#1f2937]">
+            Draw
+          </h3>
+          <p className="mt-2 text-sm font-medium text-[#374151]">
+            This round ended in a draw.
+          </p>
         </div>
-      )}
-
-      {result === 'LOSE' && correctAnswer !== undefined && (
-        <div className="text-slate-300 mt-1">
-          Correct answer: <span className="font-bold text-emerald-400">{correctAnswer}</span>
+        <div className="rounded-full border-4 border-[#1f2937] bg-white p-3">
+          <Scale size={28} />
         </div>
-      )}
+      </div>
     </div>
   );
 }

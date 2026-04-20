@@ -1,4 +1,4 @@
-package com.pdsa.backend.snakesladder;
+package com.pdsa.backend.snakesandladder.service;
 
 import com.pdsa.backend.snakesladder.service.SnakeLadderSolverService;
 import org.junit.jupiter.api.Test;
