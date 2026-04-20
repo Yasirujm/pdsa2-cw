@@ -27,15 +27,22 @@ public class MinimumCostGameService {
         this.minimumCostPlayerAnswerRepository = minimumCostPlayerAnswerRepository;
     }
 
-    public MinimumCostRoundResponse createRound(int taskCount) {
+    public MinimumCostRoundResponse createRound(int taskCount, boolean useRandomSize) {
+        Random random = new Random();
+
+        if (useRandomSize) {
+            taskCount = 50 + random.nextInt(51); // 50 to 100
+        }
+
         int[][] matrix = generatorService.generateMatrix(taskCount);
         long hungarianStart = System.nanoTime();
         int hungarianAnswer = hungarianSolverService.solve(copyMatrix(matrix));
         long hungarianTime = System.nanoTime() - hungarianStart;
+
         long flowStart = System.nanoTime();
-        int minCostFlowAnswer =
-                minCostMaxFlowSolverService.solve(copyMatrix(matrix));
+        int minCostFlowAnswer = minCostMaxFlowSolverService.solve(copyMatrix(matrix));
         long flowTime = System.nanoTime() - flowStart;
+
         int correctAnswer = hungarianAnswer;
 
         List<Integer> choices = buildChoices(correctAnswer);
@@ -54,6 +61,7 @@ public class MinimumCostGameService {
         }
 
         MinimumCostRound saved = roundRepository.save(round);
+
         MinimumCostRoundResponse response = new MinimumCostRoundResponse();
         response.setGameRoundId(saved.getId());
         response.setTaskCount(taskCount);
@@ -63,6 +71,7 @@ public class MinimumCostGameService {
         response.setMinCostFlowAnswer(minCostFlowAnswer);
         response.setHungarianTimeNanos(hungarianTime);
         response.setMinCostFlowTimeNanos(flowTime);
+
         return response;
     }
 
