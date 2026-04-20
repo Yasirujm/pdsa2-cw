@@ -3,64 +3,108 @@ package com.pdsa.queens.algorithm;
 import org.springframework.stereotype.Component;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Threaded backtracking solver for 16-Queens.
- * Strategy: 16 threads run in parallel, each fixing the first queen in one column (0–15).
- * This divides the search space evenly across threads.
- *
- * Algorithm complexity: O(n!/16) per thread in parallel — 16x faster in theory.
- * Space complexity: O(n) per thread for recursion stack.
- */
 @Component
 public class ThreadedQueensSolver {
 
-    private static final int N = 16;
+    private static final int BOARD = 16;
+    private static final int QUEENS = 8;
+    private static final int MAX_SOLUTIONS = 1_000_000;
 
-    public List<int[]> findAllSolutions() throws InterruptedException, ExecutionException {
-        ExecutorService executor = Executors.newFixedThreadPool(N);
+    public List<int[]> findAllSolutions()
+            throws InterruptedException, ExecutionException {
+
+        ExecutorService executor = Executors.newFixedThreadPool(BOARD);
         List<Future<List<int[]>>> futures = new ArrayList<>();
 
-        // Each thread handles one starting row for the first queen
-        for (int startRow = 0; startRow < N; startRow++) {
-            final int row = startRow;
-            futures.add(executor.submit(() -> solveFromRow(row)));
+        // Shared counter across all threads
+        AtomicInteger totalFound = new AtomicInteger(0);
+
+        for (int startCol = 0; startCol < BOARD; startCol++) {
+            final int col = startCol;
+            futures.add(executor.submit(
+                    () -> solveFromCol(col, totalFound)
+            ));
         }
 
         List<int[]> allSolutions = new ArrayList<>();
         for (Future<List<int[]>> future : futures) {
-            allSolutions.addAll(future.get());
+            List<int[]> partial = future.get();
+            allSolutions.addAll(partial);
+            // Stop collecting once we have enough
+            if (allSolutions.size() >= MAX_SOLUTIONS) break;
         }
 
         executor.shutdown();
+
+        // Trim to exactly 1 million if slightly over
+        if (allSolutions.size() > MAX_SOLUTIONS) {
+            allSolutions = allSolutions.subList(0, MAX_SOLUTIONS);
+        }
+
         return allSolutions;
     }
 
-    private List<int[]> solveFromRow(int firstQueenRow) {
+    private List<int[]> solveFromCol(int firstCol,
+                                     AtomicInteger totalFound) {
         List<int[]> solutions = new ArrayList<>();
-        int[] queens = new int[N];
-        queens[0] = firstQueenRow;   // Fix first queen position
-        solve(queens, 1, solutions);
+
+        for (int firstRow = 0; firstRow < BOARD; firstRow++) {
+            if (totalFound.get() >= MAX_SOLUTIONS) break;
+
+            int[] queens = new int[QUEENS];
+            boolean[] usedRows = new boolean[BOARD];
+            boolean[] usedCols = new boolean[BOARD];
+            queens[0] = firstCol * BOARD + firstRow;
+            usedRows[firstRow] = true;
+            usedCols[firstCol] = true;
+            solve(queens, usedRows, usedCols, 1,
+                    solutions, totalFound);
+        }
         return solutions;
     }
 
-    private void solve(int[] queens, int col, List<int[]> solutions) {
-        if (col == N) {
-            solutions.add(queens.clone());
+    private void solve(int[] queens, boolean[] usedRows,
+                       boolean[] usedCols, int index,
+                       List<int[]> solutions,
+                       AtomicInteger totalFound) {
+
+        if (totalFound.get() >= MAX_SOLUTIONS) return;
+
+        if (index == QUEENS) {
+            int[] sorted = queens.clone();
+            Arrays.sort(sorted);
+            solutions.add(sorted);
+            totalFound.incrementAndGet();
             return;
         }
-        for (int row = 0; row < N; row++) {
-            if (isSafe(queens, col, row)) {
-                queens[col] = row;
-                solve(queens, col + 1, solutions);
+
+        for (int col = 0; col < BOARD; col++) {
+            if (totalFound.get() >= MAX_SOLUTIONS) return;
+            if (usedCols[col]) continue;
+            for (int row = 0; row < BOARD; row++) {
+                if (totalFound.get() >= MAX_SOLUTIONS) return;
+                if (usedRows[row]) continue;
+                if (isSafe(queens, index, col, row)) {
+                    queens[index] = col * BOARD + row;
+                    usedRows[row] = true;
+                    usedCols[col] = true;
+                    solve(queens, usedRows, usedCols, index + 1,
+                            solutions, totalFound);
+                    usedRows[row] = false;
+                    usedCols[col] = false;
+                }
             }
         }
     }
 
-    private boolean isSafe(int[] queens, int col, int row) {
-        for (int c = 0; c < col; c++) {
-            if (queens[c] == row) return false;
-            if (Math.abs(queens[c] - row) == Math.abs(c - col)) return false;
+    private boolean isSafe(int[] queens, int index, int col, int row) {
+        for (int i = 0; i < index; i++) {
+            int prevCol = queens[i] / BOARD;
+            int prevRow = queens[i] % BOARD;
+            if (Math.abs(prevRow - row) == Math.abs(prevCol - col))
+                return false;
         }
         return true;
     }

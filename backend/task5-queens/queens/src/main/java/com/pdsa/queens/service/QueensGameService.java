@@ -38,12 +38,12 @@ public class QueensGameService {
             log.info("Solutions already in DB ({}). Skipping pre-computation.", count);
             return;
         }
-        log.info("Starting pre-computation of all 16-Queens solutions...");
+        log.info("Starting pre-computation of all solutions...");
         runSequentialAndStore();
         runThreadedAndStore(); // Records timing only; solutions already stored
     }
 
-    @Transactional
+
     public void runSequentialAndStore() {
         log.info("Running SEQUENTIAL algorithm...");
         LocalDateTime start = LocalDateTime.now();
@@ -94,7 +94,7 @@ public class QueensGameService {
             log.info("THREADED complete: {} solutions in {}ms", solutions.size(), endMs - startMs);
         } catch (Exception e) {
             log.error("Threaded algorithm failed", e);
-            throw new RuntimeException("Threaded algorithm execution failed", e);
+            // Do not rethrow — log and continue
         }
     }
 
@@ -107,11 +107,11 @@ public class QueensGameService {
         if (playerName == null || playerName.trim().isEmpty()) {
             throw new IllegalArgumentException("Player name cannot be empty");
         }
-        if (placement == null || placement.length != 16) {
-            throw new IllegalArgumentException("Placement must have exactly 16 values");
+        if (placement == null || placement.length != 8) {
+            throw new IllegalArgumentException("Must place exactly 8 queens");
         }
         for (int val : placement) {
-            if (val < 0 || val > 15) {
+            if (val < 0 || val > 255) {
                 throw new IllegalArgumentException("Each placement value must be between 0 and 15");
             }
         }
@@ -186,23 +186,22 @@ public class QueensGameService {
     // --- Private helper methods ---
 
     private void saveSolutionsBatch(List<int[]> solutions) {
-        List<Solution> entities = new ArrayList<>();
+        log.info("Saving {} solutions to database...", solutions.size());
+        int saved = 0;
         for (int[] sol : solutions) {
-            String json = arrayToJson(sol);
-            String hash = computeHash(sol);
-            entities.add(Solution.builder()
-                    .placement(json)
-                    .placementHash(hash)
-                    .isClaimed(false)
-                    .build());
-            if (entities.size() >= 1000) {
-                solutionRepository.saveAll(entities);
-                entities.clear();
+            try {
+                String json = arrayToJson(sol);
+                String hash = computeHash(sol);
+                solutionRepository.insertIgnore(json, hash);
+                saved++;
+                if (saved % 50000 == 0) {
+                    log.info("Saved {}/{} solutions...", saved, solutions.size());
+                }
+            } catch (Exception e) {
+                log.warn("Failed to save one solution: {}", e.getMessage());
             }
         }
-        if (!entities.isEmpty()) {
-            solutionRepository.saveAll(entities);
-        }
+        log.info("Finished saving. Total saved: {}", saved);
     }
 
     private String arrayToJson(int[] arr) {
