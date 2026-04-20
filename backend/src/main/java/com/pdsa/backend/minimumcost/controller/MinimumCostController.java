@@ -19,8 +19,12 @@ public class MinimumCostController {
     }
 
     @PostMapping("/round")
-    public ResponseEntity<MinimumCostRoundResponse> createRound(@Valid @RequestBody MinimumCostCreateRoundRequest request) {
-        return ResponseEntity.ok(gameService.createRound(request.getTaskCount()));
+    public ResponseEntity<MinimumCostRoundResponse> createRound(
+            @Valid @RequestBody MinimumCostCreateRoundRequest request
+    ) {
+        return ResponseEntity.ok(
+                gameService.createRound(request.getTaskCount(), request.isUseRandomSize())
+        );
     }
 
     @PostMapping("/answer")
