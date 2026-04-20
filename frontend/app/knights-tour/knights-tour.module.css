@@ -1,0 +1,487 @@
+/* =============================
+   Page Layout
+   ============================= */
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+  font-family: system-ui, -apple-system, sans-serif;
+  color: #1a1a2e;
+}
+
+/* =============================
+   Heading
+   ============================= */
+.title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #555;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* =============================
+   Controls
+   ============================= */
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.select {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.95rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.select:focus {
+  border-color: #4f46e5;
+}
+
+.select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.startButton {
+  padding: 0.55rem 1.4rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  background-color: #4f46e5;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s, opacity 0.2s;
+}
+
+.startButton:hover:not(:disabled) {
+  background-color: #4338ca;
+}
+
+.startButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Solve Tour button — green to visually distinguish from Start */
+.solveButton {
+  padding: 0.55rem 1.4rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  background-color: #16a34a;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s, opacity 0.2s;
+}
+
+.solveButton:hover:not(:disabled) {
+  background-color: #15803d;
+}
+
+.solveButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Divider between start results and solve results */
+.divider {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 0 0 1.5rem;
+}
+
+/* Heading for solve section */
+.sectionHeading {
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 1.25rem;
+}
+
+/* =============================
+   Error
+   ============================= */
+.errorBox {
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-radius: 6px;
+  color: #b91c1c;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* =============================
+   Summary Cards
+   ============================= */
+.summary {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+}
+
+.summaryCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #f5f3ff;
+  border: 1px solid #c4b5fd;
+  border-radius: 8px;
+  padding: 0.75rem 1.25rem;
+  min-width: 140px;
+}
+
+.summaryLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #7c3aed;
+  margin-bottom: 0.25rem;
+}
+
+.summaryValue {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+/* =============================
+   Boards
+   ============================= */
+.boards {
+  display: flex;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.boardSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.boardTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #374151;
+}
+
+/* Scrollable wrapper for large boards */
+.boardWrapper {
+  overflow: auto;
+  max-width: 100%;
+  border: 2px solid #d1d5db;
+  border-radius: 6px;
+}
+
+.board {
+  display: grid;
+  /* gridTemplateColumns is set inline */
+}
+
+/* =============================
+   Cells
+   ============================= */
+.cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 500;
+  width: clamp(30px, 5vw, 52px);
+  height: clamp(30px, 5vw, 52px);
+  user-select: none;
+}
+
+/* Light chessboard square */
+.cellLight {
+  background-color: #f0d9b5;
+  color: #6b4c11;
+}
+
+/* Dark chessboard square */
+.cellDark {
+  background-color: #b58863;
+  color: #f9e4c0;
+}
+
+/* Start cell (value = 0) */
+.cellStart {
+  background-color: #4f46e5;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* =============================
+   Interactive Game Layout
+   ============================= */
+.trySection {
+  margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.playerBoard {
+  display: grid;
+  background-color: #fff;
+}
+
+/* Interactive Game Cells */
+.gameCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  width: clamp(30px, 5vw, 52px);
+  height: clamp(30px, 5vw, 52px);
+  user-select: none;
+  cursor: default;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.gameCellValid {
+  background-color: #86efac; /* Green highlight for valid moves */
+  color: #14532d;
+  cursor: pointer;
+}
+
+.gameCellValid:hover {
+  background-color: #4ade80;
+  transform: scale(1.05);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  z-index: 2;
+  position: relative;
+}
+
+.gameCellCurrent {
+  background-color: #f59e0b; /* Distinct highlight for current knight cell */
+  color: #fff;
+  font-weight: 700;
+  position: relative;
+  z-index: 1;
+}
+
+/* Win/Loss Status Boxes */
+.gameStatusBox {
+  margin-top: 1.5rem;
+  padding: 1rem 1.5rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  text-align: center;
+  font-weight: 600;
+  width: 100%;
+  max-width: 400px;
+}
+
+.statusPlaying {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+}
+
+.statusWon {
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  color: #166534;
+}
+
+.statusLost {
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  color: #b91c1c;
+}
+
+.statusStats {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: #4b5563;
+  align-items: center;
+}
+
+/* =============================
+   Animations
+   ============================= */
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #ffffff;
+  animation: spin 0.8s linear infinite;
+  vertical-align: middle;
+  margin-right: 0.4rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.leaderboardNavBtn {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.leaderboardNavBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px -1px rgba(16, 185, 129, 0.4);
+}
+
+.fadeIn {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.slideUp {
+  animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.pulseText {
+  animation: pulse 1.5s infinite;
+  text-align: center;
+  font-weight: 600;
+  color: #4f46e5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
+}
+
+.resultCard {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  padding: 2rem;
+  border: 1px solid #e2e8f0;
+}
+
+.loadingText {
+  text-align: center;
+  font-weight: 600;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+  padding: 2rem 0;
+}
+
+/* =============================
+   Timer & Player State UI
+   ============================= */
+.playerNameInput {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.95rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  min-width: 160px;
+}
+
+.playerNameInput:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+}
+
+.timerDisplay {
+  font-family: inherit;
+  font-feature-settings: 'tnum';
+  font-variant-numeric: tabular-nums;
+  background: #1e293b;
+  color: #fff;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+.saveSummaryBox {
+  margin-top: 1rem;
+  padding: 0.8rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  text-align: center;
+  font-weight: 600;
+  border: 1px dashed #cbd5e1;
+  background: #f8fafc;
+  color: #475569;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
