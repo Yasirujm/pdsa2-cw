@@ -1,4 +1,4 @@
-package com.pdsa.queens.entity;
+package com.pdsa.backend.queens.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

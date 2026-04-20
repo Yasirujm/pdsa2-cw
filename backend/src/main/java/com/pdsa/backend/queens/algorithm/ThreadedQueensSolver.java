@@ -1,4 +1,4 @@
-package com.pdsa.queens.algorithm;
+package com.pdsa.backend.queens.algorithm;
 
 import org.springframework.stereotype.Component;
 import java.util.*;

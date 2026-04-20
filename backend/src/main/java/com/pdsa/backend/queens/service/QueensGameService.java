@@ -1,8 +1,14 @@
-package com.pdsa.queens.service;
+package com.pdsa.backend.queens.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pdsa.queens.algorithm.SequentialQueensSolver;
-import com.pdsa.queens.algorithm.ThreadedQueensSolver;
+import com.pdsa.backend.queens.algorithm.ThreadedQueensSolver;
+import com.pdsa.backend.queens.algorithm.SequentialQueensSolver;
+import com.pdsa.backend.queens.entity.AlgorithmRun;
+import com.pdsa.backend.queens.entity.GameSession;
+import com.pdsa.backend.queens.entity.Solution;
+import com.pdsa.backend.queens.repository.AlgorithmRunRepository;
+import com.pdsa.backend.queens.repository.GameSessionRepository;
+import com.pdsa.backend.queens.repository.SolutionRepository;
 import com.pdsa.queens.entity.*;
 import com.pdsa.queens.repository.*;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.pdsa.queens;
+package com.pdsa.backend.queens;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

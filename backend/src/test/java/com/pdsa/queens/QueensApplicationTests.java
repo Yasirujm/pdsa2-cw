@@ -1,7 +1,6 @@
 package com.pdsa.queens;
 
-import com.pdsa.queens.algorithm.SequentialQueensSolver;
-import com.pdsa.queens.algorithm.ThreadedQueensSolver;
+import com.pdsa.backend.queens.algorithm.SequentialQueensSolver;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;

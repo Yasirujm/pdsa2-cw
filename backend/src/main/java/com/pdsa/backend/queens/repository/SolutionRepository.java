@@ -1,6 +1,6 @@
-package com.pdsa.queens.repository;
+package com.pdsa.backend.queens.repository;
 
-import com.pdsa.queens.entity.Solution;
+import com.pdsa.backend.queens.entity.Solution;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
