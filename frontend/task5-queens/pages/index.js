@@ -52,7 +52,7 @@ export default function HomePage() {
           PDSA Coursework — Task 5
         </div>
         <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '14px', lineHeight: '1.7', marginBottom: '32px' }}>
-          Place 16 queens on a 16×16 chessboard so that no two queens threaten each other.
+          Place 8 queens on a 16×16 chessboard so that no two queens threaten each other.
           Find a <strong style={{ color: '#a5b4fc' }}>unique solution</strong> nobody has claimed yet!
         </p>
 
@@ -114,7 +114,7 @@ export default function HomePage() {
         </button>
 
         <div style={{ display: 'flex', justifyContent: 'center', gap: '24px', marginTop: '32px' }}>
-          {[['14.7M', 'Solutions'], ['16×16', 'Board'], ['2', 'Algorithms']].map(([val, label]) => (
+          {[['10M+', 'Solutions'], ['16×16', 'Board'], ['2', 'Algorithms']].map(([val, label]) => (
             <div key={label} style={{ textAlign: 'center' }}>
               <div style={{ color: '#a5b4fc', fontSize: '18px', fontWeight: '700' }}>{val}</div>
               <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '11px' }}>{label}</div>

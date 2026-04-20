@@ -102,7 +102,7 @@ public class QueensGameService {
      * Process a player's submitted queen placement.
      * Returns WIN, LOSE, or DRAW.
      */
-    @Transactional
+    /*@Transactional
     public GameResult submitAnswer(String playerName, int[] placement) {
         if (playerName == null || playerName.trim().isEmpty()) {
             throw new IllegalArgumentException("Player name cannot be empty");
@@ -173,6 +173,115 @@ public class QueensGameService {
         }
 
         return new GameResult("WIN", "Correct! You found a unique solution!");
+    }*/
+    @Transactional
+    public GameResult submitAnswer(String playerName, int[] placement) {
+
+        // VALIDATION
+        if (playerName == null || playerName.trim().isEmpty())
+            throw new IllegalArgumentException("Player name cannot be empty");
+        if (placement == null || placement.length != 8)
+            throw new IllegalArgumentException("Must place exactly 8 queens");
+        for (int val : placement)
+            if (val < 0 || val > 255)
+                throw new IllegalArgumentException("Values must be 0-255");
+
+        // STEP 1: Validate mathematically — is this actually a valid solution?
+        if (!isValidSolution(placement)) {
+            gameSessionRepository.save(GameSession.builder()
+                    .playerName(playerName.trim())
+                    .submittedPlacement(arrayToJson(placement))
+                    .isCorrect(false)
+                    .result(GameSession.GameResult.LOSE)
+                    .build());
+            return new GameResult("LOSE",
+                    "Invalid placement. Not a valid solution.");
+        }
+
+        // STEP 2: Valid solution — check if already claimed
+        String hash = computeHash(placement);
+        Optional<Solution> found = solutionRepository.findByPlacementHash(hash);
+
+        if (found.isPresent() && found.get().getIsClaimed()) {
+            // DRAW — valid but already claimed
+            gameSessionRepository.save(GameSession.builder()
+                    .playerName(playerName.trim())
+                    .submittedPlacement(arrayToJson(placement))
+                    .isCorrect(true)
+                    .result(GameSession.GameResult.DRAW)
+                    .solution(found.get())
+                    .build());
+            return new GameResult("DRAW",
+                    "Valid solution! But already found by "
+                            + found.get().getClaimedBy()
+                            + ". Try a different arrangement.");
+        }
+
+        // STEP 3: WIN — valid and unclaimed
+        // Save to solutions table if not already there
+        Solution solution;
+        if (found.isEmpty()) {
+            solution = Solution.builder()
+                    .placement(arrayToJson(placement))
+                    .placementHash(hash)
+                    .isClaimed(true)
+                    .claimedBy(playerName.trim())
+                    .claimedAt(LocalDateTime.now())
+                    .build();
+            solutionRepository.save(solution);
+        } else {
+            solution = found.get();
+            solution.setIsClaimed(true);
+            solution.setClaimedBy(playerName.trim());
+            solution.setClaimedAt(LocalDateTime.now());
+            solutionRepository.save(solution);
+        }
+
+        gameSessionRepository.save(GameSession.builder()
+                .playerName(playerName.trim())
+                .submittedPlacement(arrayToJson(placement))
+                .isCorrect(true)
+                .result(GameSession.GameResult.WIN)
+                .solution(solution)
+                .build());
+
+        // Reset all claims if all stored solutions are claimed
+        long unclaimed = solutionRepository.countByIsClaimedFalse();
+        if (unclaimed == 0) {
+            solutionRepository.resetAllClaims();
+            log.info("All solutions claimed. Resetting flags.");
+        }
+
+        return new GameResult("WIN", "Correct! You found a unique solution!");
+    }
+
+    // Mathematical validation — checks all three constraints
+    private boolean isValidSolution(int[] placement) {
+        if (placement.length != 8) return false;
+
+        int[] sorted = placement.clone();
+        java.util.Arrays.sort(sorted);
+
+        for (int i = 0; i < sorted.length; i++) {
+            int col1 = sorted[i] / 16;
+            int row1 = sorted[i] % 16;
+
+            for (int j = i + 1; j < sorted.length; j++) {
+                int col2 = sorted[j] / 16;
+                int row2 = sorted[j] % 16;
+
+                // Same row
+                if (row1 == row2) return false;
+
+                // Same column
+                if (col1 == col2) return false;
+
+                // Same diagonal
+                if (Math.abs(row1 - row2) == Math.abs(col1 - col2))
+                    return false;
+            }
+        }
+        return true;
     }
 
     public List<GameSession> getLeaderboard() {
