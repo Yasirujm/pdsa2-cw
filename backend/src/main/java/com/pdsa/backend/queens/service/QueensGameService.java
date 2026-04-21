@@ -37,7 +37,7 @@ public class QueensGameService {
      * Run on application startup: compute all solutions if not already in DB.
      * This ensures the DB is populated before any player submits an answer.
      */
-    @EventListener(ApplicationReadyEvent.class)
+    /*@EventListener(ApplicationReadyEvent.class)
     public void initializeSolutions() {
         long count = solutionRepository.count();
         if (count > 0) {
@@ -47,10 +47,18 @@ public class QueensGameService {
         log.info("Starting pre-computation of all solutions...");
         runSequentialAndStore();
         runThreadedAndStore(); // Records timing only; solutions already stored
+    }*/
+
+    @EventListener(ApplicationReadyEvent.class)
+    public void initializeSolutions() {
+        log.info("Running algorithms for timing comparison...");
+        runSequentialAndRecord();
+        runThreadedAndRecord();
+        log.info("Algorithms complete. Game is ready.");
     }
 
 
-    public void runSequentialAndStore() {
+    /*public void runSequentialAndStore() {
         log.info("Running SEQUENTIAL algorithm...");
         LocalDateTime start = LocalDateTime.now();
         long startMs = System.currentTimeMillis();
@@ -74,9 +82,37 @@ public class QueensGameService {
         algorithmRunRepository.save(run);
 
         log.info("SEQUENTIAL complete: {} solutions in {}ms", solutions.size(), endMs - startMs);
+    }*/
+
+    public void runSequentialAndRecord() {
+        try {
+            log.info("Running SEQUENTIAL algorithm...");
+            LocalDateTime start = LocalDateTime.now();
+            long startMs = System.currentTimeMillis();
+
+            List<int[]> solutions = sequentialSolver.findAllSolutions();
+
+            long endMs = System.currentTimeMillis();
+            LocalDateTime end = LocalDateTime.now();
+
+            // Record timing only — do NOT save solutions to DB
+            algorithmRunRepository.save(AlgorithmRun.builder()
+                    .algorithmType(AlgorithmRun.AlgorithmType.SEQUENTIAL)
+                    .startedAt(start)
+                    .endedAt(end)
+                    .timeTakenMs(endMs - startMs)
+                    .totalSolutionsFound(solutions.size())
+                    .build());
+
+            log.info("SEQUENTIAL complete: {} solutions in {}ms",
+                    solutions.size(), endMs - startMs);
+
+        } catch (Exception e) {
+            log.error("Sequential algorithm failed", e);
+        }
     }
 
-    @Transactional
+    /*@Transactional
     public void runThreadedAndStore() {
         try {
             log.info("Running THREADED algorithm...");
@@ -101,6 +137,33 @@ public class QueensGameService {
         } catch (Exception e) {
             log.error("Threaded algorithm failed", e);
             // Do not rethrow — log and continue
+        }
+    }*/
+    public void runThreadedAndRecord() {
+        try {
+            log.info("Running THREADED algorithm...");
+            LocalDateTime start = LocalDateTime.now();
+            long startMs = System.currentTimeMillis();
+
+            List<int[]> solutions = threadedSolver.findAllSolutions();
+
+            long endMs = System.currentTimeMillis();
+            LocalDateTime end = LocalDateTime.now();
+
+            // Record timing only — do NOT save solutions to DB
+            algorithmRunRepository.save(AlgorithmRun.builder()
+                    .algorithmType(AlgorithmRun.AlgorithmType.THREADED)
+                    .startedAt(start)
+                    .endedAt(end)
+                    .timeTakenMs(endMs - startMs)
+                    .totalSolutionsFound(solutions.size())
+                    .build());
+
+            log.info("THREADED complete: {} solutions in {}ms",
+                    solutions.size(), endMs - startMs);
+
+        } catch (Exception e) {
+            log.error("Threaded algorithm failed", e);
         }
     }
 
@@ -300,7 +363,7 @@ public class QueensGameService {
 
     // --- Private helper methods ---
 
-    private void saveSolutionsBatch(List<int[]> solutions) {
+    /*private void saveSolutionsBatch(List<int[]> solutions) {
         log.info("Saving {} solutions to database...", solutions.size());
         int saved = 0;
         for (int[] sol : solutions) {
@@ -317,7 +380,7 @@ public class QueensGameService {
             }
         }
         log.info("Finished saving. Total saved: {}", saved);
-    }
+    }*/
 
     private String arrayToJson(int[] arr) {
         try {
