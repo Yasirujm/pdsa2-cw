@@ -3,7 +3,7 @@ package com.pdsa.backend.queens.controller;
 import com.pdsa.backend.queens.entity.AlgorithmRun;
 import com.pdsa.backend.queens.entity.GameSession;
 import com.pdsa.backend.queens.service.QueensGameService;
-import com.pdsa.queens.entity.*;
+import com.pdsa.backend.queens.entity.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
