@@ -1,0 +1,353 @@
+.pageContainer {
+  min-height: 100vh;
+  background-color: #f8fafc;
+  padding: 3rem 1.5rem;
+  font-family: system-ui, -apple-system, sans-serif;
+  color: #0f172a;
+}
+
+.header {
+  max-width: 1000px;
+  margin: 0 auto 3rem auto;
+  text-align: center;
+  position: relative;
+}
+
+.backButton {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #4f46e5;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: all 0.2s;
+}
+
+.backButton:hover {
+  background: #4f46e5;
+  color: #fff;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #4f46e5, #9333ea);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: #64748b;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.mainContent {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+/* Loading & Empty States */
+.loadingContainer, .errorContainer, .emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  text-align: center;
+  color: #64748b;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e2e8f0;
+  border-top-color: #4f46e5;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.emptyIcon {
+  color: #cbd5e1;
+  margin-bottom: 1rem;
+}
+
+/* Podium Section */
+.podiumContainer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  min-height: 250px;
+}
+
+.podiumItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 280px;
+  transition: transform 0.3s ease;
+}
+
+.podiumItem:hover {
+  transform: translateY(-5px);
+}
+
+.podiumRank {
+  margin-bottom: -15px;
+  z-index: 2;
+  background: #fff;
+  border-radius: 50%;
+  padding: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+}
+
+.podiumBox {
+  width: 100%;
+  background: #fff;
+  border-radius: 16px;
+  padding: 2.5rem 1.5rem 1.5rem;
+  text-align: center;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.firstPlace .podiumBox {
+  background: linear-gradient(to bottom, #fffbea, #ffffff);
+  border: 2px solid #fde68a;
+  padding-top: 3rem;
+  min-height: 200px;
+  box-shadow: 0 20px 25px -5px rgba(251, 191, 36, 0.2);
+}
+
+.secondPlace .podiumBox {
+  background: linear-gradient(to bottom, #f8fafc, #ffffff);
+  border: 1px solid #e2e8f0;
+  min-height: 170px;
+}
+
+.thirdPlace .podiumBox {
+  background: linear-gradient(to bottom, #fff7ed, #ffffff);
+  border: 1px solid #ffedd5;
+  min-height: 150px;
+}
+
+.rankLabel {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+  color: #94a3b8;
+}
+
+.firstPlace .rankLabel { color: #d97706; }
+.secondPlace .rankLabel { color: #64748b; }
+.thirdPlace .rankLabel { color: #9a3412; }
+
+.podiumName {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.firstPlace .podiumName { font-size: 1.7rem; }
+
+.podiumStats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.95rem;
+  color: #475569;
+  font-weight: 500;
+}
+
+/* List Section */
+.listSection {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.tableHeader {
+  display: flex;
+  padding: 1rem 1.5rem;
+  background: #f1f5f9;
+  font-weight: 600;
+  color: #475569;
+  font-size: 0.9rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.listContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.listItem {
+  display: flex;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #f1f5f9;
+  align-items: center;
+  transition: background-color 0.2s;
+}
+
+.listItem:hover {
+  background-color: #f8fafc;
+}
+
+.listItem:last-child {
+  border-bottom: none;
+}
+
+/* Grid Columns Setup */
+.colRank { flex: 0 0 80px; }
+.colPlayer { flex: 2; display: flex; flex-direction: column; gap: 0.2rem; }
+.colStatus { flex: 2; display: flex; flex-direction: column; gap: 0.3rem; }
+.colStats { flex: 1.5; display: flex; flex-direction: column; gap: 0.3rem; }
+.colDate { flex: 1.5; color: #64748b; font-size: 0.9rem; }
+
+.rankNumber {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
+  background: #f1f5f9;
+  color: #475569;
+  font-weight: 700;
+  border-radius: 50%;
+}
+
+.playerName {
+  font-weight: 700;
+  color: #0f172a;
+  font-size: 1.1rem;
+}
+
+.boardSize {
+  font-size: 0.8rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badgeSuccess, .badgeDanger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  width: fit-content;
+}
+
+.badgeSuccess {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badgeDanger {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.validationMsg {
+  font-size: 0.8rem;
+  color: #64748b;
+  font-style: italic;
+}
+
+.statLine {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: #334155;
+  font-weight: 500;
+}
+
+/* Responsive Styles */
+@media (max-width: 860px) {
+  .podiumContainer {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .secondPlace, .thirdPlace {
+    order: 2;
+  }
+  
+  .firstPlace {
+    order: 1;
+    transform: scale(1.05);
+    margin-bottom: 1rem;
+  }
+  
+  .podiumItem {
+    width: 100%;
+    max-width: 320px;
+  }
+  
+  .header {
+    margin-top: 3rem;
+  }
+  
+  .backButton {
+    position: relative;
+    margin-bottom: 2rem;
+    display: inline-flex;
+  }
+}
+
+@media (max-width: 768px) {
+  .tableHeader {
+    display: none;
+  }
+  
+  .listItem {
+    flex-wrap: wrap;
+    gap: 1rem;
+    position: relative;
+    padding-top: 2rem;
+  }
+  
+  .colRank {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    flex: none;
+  }
+  
+  .colPlayer {
+    flex: 100%;
+  }
+  
+  .colStatus, .colStats, .colDate {
+    flex: 100%;
+  }
+}
