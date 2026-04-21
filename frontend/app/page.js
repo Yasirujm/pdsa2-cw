@@ -23,6 +23,11 @@ export default function Home() {
           Open Knight Tour
         </Link>
       </div>
+      <div>
+        <Link href="/queens" className="p-4 bg-blue-600 text-white rounded">
+          Open 8 Queens Puzzel
+        </Link>
+      </div>
       
     </div>
   );
