@@ -13,7 +13,7 @@ export default function LeaderboardPage() {
   useEffect(() => {
     async function fetchLeaderboard() {
       try {
-        const response = await fetch('http://localhost:8081/api/knight-tour/leaderboard');
+        const response = await fetch('http://localhost:8080/api/knight-tour/leaderboard');
         if (!response.ok) {
           throw new Error('Failed to fetch leaderboard data');
         }
