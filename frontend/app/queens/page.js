@@ -13,6 +13,10 @@ function NameEntry({ onStart }) {
 
   const handleStart = () => {
     const trimmed = name.trim();
+    if (!/^[a-zA-Z\s]+$/.test(trimmed)) {
+      setError('Name must contain only letters');
+      return;
+    }
     if (!trimmed) { setError('Please enter your name.'); return; }
     if (trimmed.length < 2) { setError('Name must be at least 2 characters.'); return; }
     if (trimmed.length > 50) { setError('Name must be less than 50 characters.'); return; }
@@ -58,7 +62,16 @@ function NameEntry({ onStart }) {
         <input
           type="text"
           value={name}
-          onChange={e => { setName(e.target.value); setError(''); }}
+          onChange={e => {
+            const value = e.target.value;
+
+            if (/^[a-zA-Z\s]*$/.test(value)) {
+              setName(value);
+              setError('');
+            } else {
+              setError('Name can only contain letters');
+            }
+          }}
           onKeyDown={e => e.key === 'Enter' && handleStart()}
           placeholder="Enter your name"
           style={{

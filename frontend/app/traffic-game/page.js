@@ -127,7 +127,7 @@ export default function TrafficGame() {
             
             {/* NETWORK GRAPH */}
             <div className="w-full overflow-x-auto bg-slate-950 border border-slate-800 rounded-2xl p-4 relative">
-              <svg viewBox="0 0 750 400" className="w-full h-auto min-w-[600px]">
+              <svg viewBox="0 0 750 400" className="w-full h-auto min-w-150">
                 <defs>
                   <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="24" refY="3.5" orient="auto">
                     <polygon points="0 0, 10 3.5, 0 7" fill="#475569" />
@@ -177,7 +177,7 @@ export default function TrafficGame() {
             
             {/* INPUTS */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <input type="text" placeholder="Player Name" value={userName} disabled={showResults} onChange={e => setUserName(e.target.value)} className="bg-slate-950 border border-slate-700 text-white p-4 rounded-xl outline-none disabled:opacity-50" />
+              <input type="text" placeholder="Player Name" value={userName} disabled={showResults} onChange={e => {const value = e.target.value; if (/^[a-zA-Z\s]*$/.test(value)) { setUserName(value); setErrorMessage(''); } else { setErrorMessage('Name can only contain letters');}}} className="bg-slate-950 border border-slate-700 text-white p-4 rounded-xl outline-none disabled:opacity-50" />
               <input type="number" placeholder="Enter Max Flow" value={userInput} disabled={showResults} onChange={e => setUserInput(e.target.value)} className="bg-slate-950 border border-slate-700 text-emerald-400 font-bold p-4 rounded-xl outline-none disabled:opacity-50" />
             </div>
             

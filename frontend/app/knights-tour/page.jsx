@@ -109,6 +109,10 @@ export default function KnightsTourPage() {
   };
 
   async function handleStart() {
+    if (!/^[a-zA-Z\s]+$/.test(playerName.trim())) {
+      setError('Player name must contain only letters');
+      return;
+    }
     if (!playerName || playerName.trim() === '') {
       setError('Player name is required before starting the game.');
       return;
@@ -431,7 +435,17 @@ export default function KnightsTourPage() {
             className={styles.playerNameInput}
             placeholder="e.g. David"
             value={playerName}
-            onChange={(e) => setPlayerName(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+
+              // Allow only letters and spaces
+              if (/^[a-zA-Z\s]*$/.test(value)) {
+                setPlayerName(value);
+                setError(null);
+              } else {
+                setError('Player name can only contain letters');
+              }
+            }}
             disabled={loading || timerRunning || (result && gameStatus === 'playing')}
           />
         </div>
