@@ -57,6 +57,10 @@ export default function MinimumCostPage() {
   };
 
   const handleSubmit = async () => {
+    if (!/^[a-zA-Z\s]+$/.test(playerName.trim())) {
+      setError('Player name must contain only letters');
+      return;
+    }
     if (!playerName.trim()) {
       setError('Please enter player name');
       return;
@@ -113,7 +117,7 @@ export default function MinimumCostPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,_#3b1d0f_0%,_#1e1b2e_38%,_#0f172a_100%)] text-slate-100 px-4 py-8 md:px-6 lg:px-8">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top,#3b1d0f_0%,#1e1b2e_38%,#0f172a_100%)] text-slate-100 px-4 py-8 md:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl space-y-6">
         <div className="overflow-hidden rounded-[28px] border border-white/10 bg-white/5 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl">
           <div className="grid lg:grid-cols-[360px_1fr]">
@@ -145,7 +149,16 @@ export default function MinimumCostPage() {
                   </label>
                   <input
                     value={playerName}
-                    onChange={(e) => setPlayerName(e.target.value)}
+                    onChange={(e) => {
+                      const value = e.target.value;
+
+                      if (/^[a-zA-Z\s]*$/.test(value)) {
+                        setPlayerName(value);
+                        setError('');
+                      } else {
+                        setError('Player name can only contain letters');
+                      }
+                    }}
                     placeholder="Enter your name"
                     className="w-full rounded-2xl border border-white/10 bg-slate-900/70 px-4 py-3 text-white outline-none transition focus:border-amber-400/60 focus:ring-2 focus:ring-amber-500/20"
                   />
@@ -224,7 +237,7 @@ export default function MinimumCostPage() {
 
             <main className="space-y-6 p-6 md:p-7">
               {!round ? (
-                <div className="flex min-h-[520px] items-center justify-center rounded-[24px] border border-dashed border-white/10 bg-slate-950/20 p-8 text-center">
+                <div className="flex min-h-130 items-center justify-center rounded-3xl border border-dashed border-white/10 bg-slate-950/20 p-8 text-center">
                   <div className="max-w-md">
                     <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-500/10 text-3xl">
                       🧩
@@ -239,19 +252,19 @@ export default function MinimumCostPage() {
               ) : (
                 <>
                   <div className="grid gap-4 md:grid-cols-3">
-                    <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-amber-500/15 to-amber-500/5 p-5">
+                    <div className="rounded-3xl border border-white/10 bg-linear-to-br from-amber-500/15 to-amber-500/5 p-5">
                       <div className="text-sm text-amber-200">Generated Tasks</div>
                       <div className="mt-2 text-3xl font-bold text-white">{round.taskCount}</div>
                     </div>
 
-                    <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-rose-500/15 to-rose-500/5 p-5">
+                    <div className="rounded-3xl border border-white/10 bg-linear-to-br from-rose-500/15 to-rose-500/5 p-5">
                       <div className="text-sm text-rose-200">Answer Choices</div>
                       <div className="mt-2 text-3xl font-bold text-white">
                         {round.answerChoices?.length ?? 0}
                       </div>
                     </div>
 
-                    <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-teal-500/15 to-teal-500/5 p-5">
+                    <div className="rounded-3xl border border-white/10 bg-linear-to-br from-teal-500/15 to-teal-500/5 p-5">
                       <div className="text-sm text-teal-200">Round Status</div>
                       <div className="mt-2 text-lg font-bold text-white">
                         {hasSubmitted ? 'Submitted' : 'Waiting for answer'}
@@ -259,7 +272,7 @@ export default function MinimumCostPage() {
                     </div>
                   </div>
 
-                  <div className="space-y-5 rounded-[24px] border border-white/10 bg-slate-950/30 p-5 md:p-6">
+                  <div className="space-y-5 rounded-3xl border border-white/10 bg-slate-950/30 p-5 md:p-6">
                     <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
                       <div>
                         <h2 className="text-xl font-bold text-white">Pick the Best Total Cost</h2>
@@ -288,7 +301,7 @@ export default function MinimumCostPage() {
 
                   {hasSubmitted && (
                     <div className="grid gap-4 md:grid-cols-2">
-                      <div className="rounded-[24px] border border-amber-500/20 bg-amber-500/5 p-5">
+                      <div className="rounded-3xl border border-amber-500/20 bg-amber-500/5 p-5">
                         <div className="text-sm font-medium uppercase tracking-wide text-amber-300">
                           Hungarian Algorithm
                         </div>
@@ -300,7 +313,7 @@ export default function MinimumCostPage() {
                         </div>
                       </div>
 
-                      <div className="rounded-[24px] border border-rose-500/20 bg-rose-500/5 p-5">
+                      <div className="rounded-3xl border border-rose-500/20 bg-rose-500/5 p-5">
                         <div className="text-sm font-medium uppercase tracking-wide text-rose-300">
                           Min-Cost Max-Flow
                         </div>
