@@ -16,7 +16,6 @@ class SnakeLadderSolverServiceTest {
     void bfsAndDijkstraShouldReturnSameAnswer() {
         Map<Integer, Integer> jumps = new HashMap<>();
 
-        // sample snakes & ladders
         jumps.put(2, 15);  // ladder
         jumps.put(18, 5);  // snake
         jumps.put(9, 27);  // ladder
