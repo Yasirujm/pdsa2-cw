@@ -29,12 +29,12 @@
 
 ### Frontend (Next.js)
 
-Navigate to the frontend folder and run:
+Navigate to the frontend folder and run on terminal:
 
 - npm install
 - npm run dev
 
 ### Backend (Spring Boot)
 
-Navigate to application properties and change DB credentials
+Navigate to application.properties in resources folder and change DB credentials
 
