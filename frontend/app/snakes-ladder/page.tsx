@@ -33,6 +33,11 @@ export default function SnakesLadderPage() {
       setCorrectAnswer(undefined);
       setSelectedAnswer(null);
 
+      if (boardSize < 6 || boardSize > 12) {
+        setError('Board size must be between 6 and 12');
+        return;
+      }
+
       const data = await createRound(boardSize);
       setRound(data);
     } catch {
@@ -43,8 +48,8 @@ export default function SnakesLadderPage() {
   };
 
   const handleSubmit = async () => {
-    if (!playerName.trim()) {
-      setError('Please enter player name');
+    if (!/^[a-zA-Z\s]+$/.test(playerName)) {
+      setError('Player name must contain only letters');
       return;
     }
 
@@ -127,7 +132,17 @@ export default function SnakesLadderPage() {
                     <User size={18} className="text-[#6b7280]" />
                     <input
                       value={playerName}
-                      onChange={(e) => setPlayerName(e.target.value)}
+                      onChange={(e) => {
+                        const value = e.target.value;
+
+                        // Allow only letters and spaces
+                        if (/^[a-zA-Z\s]*$/.test(value)) {
+                          setPlayerName(value);
+                          setError('');
+                        } else {
+                          setError('Player name can only contain letters');
+                        }
+                      }}
                       placeholder="Type your name"
                       className="w-full bg-transparent text-[#111827] outline-none placeholder:text-[#9ca3af]"
                     />
@@ -145,7 +160,16 @@ export default function SnakesLadderPage() {
                       min={6}
                       max={12}
                       value={boardSize}
-                      onChange={(e) => setBoardSize(Number(e.target.value))}
+                      onChange={(e) => {
+                        const value = Number(e.target.value);
+
+                        if (value >= 6 && value <= 12) {
+                          setBoardSize(value);
+                          setError('');
+                        } else {
+                          setError('Board size must be between 6 and 12');
+                        }
+                      }}
                       className="w-full bg-transparent text-[#111827] outline-none"
                     />
                   </div>
